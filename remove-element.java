@@ -1,7 +1,7 @@
 /*
+27. Remove Element
 https://leetcode.com/problems/remove-element/description/
 
-27. Remove Element
 
 Given an array and a value, remove all instances of that value in-place and
 return the new length.
@@ -24,11 +24,13 @@ being 2.
 class Solution {
     public int removeElement(int[] nums, int val) {
         int lastIndex = -1;
+		
         for (int i = 0; i < nums.length; i++) {
             if (nums[i] != val) {
                 nums[++lastIndex] = nums[i];
             }
         }
+		
         return lastIndex + 1;
     }
 }
