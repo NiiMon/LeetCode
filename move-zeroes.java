@@ -15,6 +15,8 @@ the total number of operations.
 
 */
 
+// version 1
+// Space Optimal, Operation Sub-Optimal
 class Solution {
     public void moveZeroes(int[] a) {
         int last = -1;
@@ -26,6 +28,25 @@ class Solution {
         for(int i = ++last; i < a.length; i++) {
             a[i] = 0;
         }
+    }
+}
+
+
+// version 2
+// Optimal
+class Solution {
+    public void moveZeroes(int[] a) {
+        int lastNonZeroIndex = -1;
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] != 0) {
+                swap(a, ++lastNonZeroIndex, i);
+            }
+        }
+    }
+    private void swap(int[] a, int i, int j) {
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
     }
 }
 
