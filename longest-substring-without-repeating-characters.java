@@ -40,3 +40,21 @@ class Solution {
     }
 }
 
+
+// optimize with int array
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int maxLen = 0;
+        int[] map = new int[256];
+        
+        int start = 0;
+        for (int i = 0; i < s.length(); i++) {
+            start = Math.max(start, map[s.charAt(i)]);
+            maxLen = Math.max(maxLen, i - start + 1);
+            map[s.charAt(i)] = i + 1;
+        }
+        
+        return maxLen;
+    }
+}
+
