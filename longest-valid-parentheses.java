@@ -15,7 +15,7 @@ Another example is ")()())", where the longest valid parentheses substring is
 
 */
 
-
+// stack solution
 class Solution {
     public int longestValidParentheses(String s) {
         if (s.length() < 2) {
@@ -46,6 +46,40 @@ class Solution {
                 len = Math.max(len, newLen);
             } else {
                 stack.push(1);  // c == '('
+            }
+        }
+        
+        return len;
+    }
+}
+
+
+// array solution
+// use an array to record the starting index of current end.
+class Solution {
+    public int longestValidParentheses(String s) {
+        if (s.length() < 2) {
+            return 0;
+        }
+        
+        int[] array = new int[s.length() + 1];
+        int len = 0;
+        
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ')' &&
+                i - 1 >= 0 && s.charAt(i - 1) == '(') {
+                // start[i] = start[i - 2]
+                array[i + 1] = array[i - 1];
+                len = Math.max(len, i - array[i + 1] + 1);
+            } else if (s.charAt(i) == ')' &&
+                       i - 1 >= 0 && s.charAt(i - 1) == ')' &&
+                       array[i] - 1 >= 0 && s.charAt(array[i] - 1) == '(') {
+                // start[i] = start[start[i - 1] - 2]
+                array[i + 1] = array[array[i] - 1];
+                len = Math.max(len, i - array[i + 1] + 1);
+            } else {
+                // start[i] = i + 1;
+                array[i + 1] = i + 1;
             }
         }
         
