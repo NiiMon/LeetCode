@@ -24,7 +24,7 @@ you implement both?
  * }
  */
 
-
+// iterative solution
 class Solution {
     public ListNode reverseList(ListNode head) {
         
@@ -39,6 +39,47 @@ class Solution {
         }
         
         return pre;
+    }
+}
+
+
+// recursive solution 1
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+        
+        ListNode next = head.next;
+        head.next = null;
+        
+        return helper(head, next);
+    }
+    private ListNode helper(ListNode prev, ListNode curr) {
+        if (curr == null) {
+            return prev;
+        }
+        
+        ListNode next = curr.next;
+        curr.next = prev;
+        
+        return helper(curr, next);
+    }
+}
+
+
+// recursive solution 2
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        
+        ListNode result = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        
+        return result;
     }
 }
 
