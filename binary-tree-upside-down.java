@@ -38,6 +38,7 @@ on OJ(https://leetcode.com/problems/binary-tree-upside-down/description/#).
  * }
  */
 
+// iterative, top-down
 class Solution {
     public TreeNode upsideDownBinaryTree(TreeNode root) {
         if (root == null || root.left == null) {
@@ -60,6 +61,24 @@ class Solution {
         }
         
         return parent;
+    }
+}
+
+
+// recursive, bottom-up
+class Solution {
+    public TreeNode upsideDownBinaryTree(TreeNode root) {
+        if (root == null || root.left == null) {
+            return root;
+        }
+        
+        TreeNode result = upsideDownBinaryTree(root.left);
+        root.left.left = root.right;
+        root.left.right = root;
+        root.left = null;
+        root.right = null;
+        
+        return result;
     }
 }
 
