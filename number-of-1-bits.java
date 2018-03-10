@@ -16,7 +16,7 @@ For example, the 32-bit integer ’11' has binary representation
 public class Solution {
     // you need to treat n as an unsigned value 
     // unsigned 10000000000000000000000000000000 is positive 
-    // while signed 10000000000000000000000000000000 is negative
+    // signed   10000000000000000000000000000000 is negative
     public int hammingWeight(int n) {
         int result = 0;
         for (int i = n; i != 0; i &= i - 1) {
