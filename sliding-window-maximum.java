@@ -29,33 +29,75 @@ Could you solve it in linear time?
 
 */
 
+// Binary search tree solution
+// O(nlogn)
 class Solution {
-    public int[] maxSlidingWindow(int[] nums, int k) {
-        if (nums.length == 0) {
-            return nums;
+    public int[] maxSlidingWindow(int[] a, int k) {
+        if (a.length == 0) {
+            return new int[]{};
         }
         
-        int[] result = new int[nums.length - k + 1];
+        int[] result = new int[a.length - k + 1];
+
+        TreeMap<Integer, Integer> tm = new TreeMap<>((k1, k2) -> {
+            // for different values
+            if (a[k1] != a[k2]) {
+                return a[k1] - a[k2];
+            }
+            // for same value, different indexes
+            else {
+                return k1 - k2;
+            }
+        });
+
+        for (int i = 0; i < a.length; i++) {
+            // remove old numbers
+            if (i >= k) {
+                tm.remove(i - k);
+            }
+
+            // add new number
+            tm.put(i, a[i]);
+
+            // write out result
+            if (i >= k - 1) {
+                result[i - k + 1] = tm.lastEntry().getValue();
+            }            
+        }
+
+        return result;
+    }
+}
+
+// Deque version
+// O(n)
+class Solution {
+    public int[] maxSlidingWindow(int[] a, int k) {
+        if (a.length == 0) {
+            return new int[]{};
+        }
         
+        int[] result = new int[a.length - k + 1];
         Deque<Integer> deque = new LinkedList<>();
-        for (int i = 0; i < nums.length; i++) {
-            // input
-            while (deque.size() > 0 && nums[deque.getLast()] <= nums[i]) {
+
+        for (int i = 0; i < a.length; i++) {
+            // remove old numbers
+            if (i >= k && deque.size() > 0 && deque.peekFirst() == i - k) {
+                deque.removeFirst();
+            }
+
+            // add new number
+            while (deque.size() > 0 && a[deque.peekLast()] <= a[i]) {
                 deque.removeLast();
             }
             deque.addLast(i);
-            
-            // output
-            if (i - k >= -1) {
-                result[i - k + 1] = nums[deque.getFirst()];
-            }
-            
-            // removal
-            if (deque.getFirst() == i - k + 1) {
-                deque.removeFirst();
-            }
+
+            // write out result
+            if (i >= k - 1) {
+                result[i - k + 1] = a[deque.peekFirst()];
+            }            
         }
-        
+
         return result;
     }
 }
