@@ -35,12 +35,9 @@ public class Solution {
         }
         
         List<String> list = new LinkedList<>();
-        int start = 0;
         
         // i == 0
-        if (s.charAt(0) == ' ') {
-            start = 1;
-        }
+        int start = s.charAt(0) == ' ' ? 1 : 0;
         
         // 1 <= i <= n
         for (int i = 1; i <= s.length(); i++) {
