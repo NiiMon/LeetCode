@@ -21,7 +21,7 @@ return the root of the binary tree [4,5,2,#,#,3,1].
   / \
  5   2
     / \
-   3   1  
+   3   1
 
 confused what "{1,#,2,3}" means? > read more on how binary tree is serialized
 on OJ(https://leetcode.com/problems/binary-tree-upside-down/description/#).
@@ -55,7 +55,7 @@ class Solution {
             root.left = preRight;
             root.right = parent;
             
-            parent = root;            
+            parent = root;
             preRight = curRight;
             root = curLeft;
         }
