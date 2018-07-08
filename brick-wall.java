@@ -97,35 +97,6 @@ class Solution {
             for (int i = 0; i < row.size() - 1; i++) {
                 sum += row.get(i);
 
-                // add to dictionary
-                if (!map.containsKey(sum)) {
-                    map.put(sum, 0);
-                }
-                map.put(sum, map.get(sum) + 1);
-
-                // keep track of the greatest count
-                minCuts = Math.min(minCuts, wall.size() - map.get(sum));
-            }
-        }
-
-        return minCuts;
-    }
-}
-// 85 / 85 test cases passed.
-// Runtime: 38 ms
-
-
-// version 3
-class Solution {
-    public int leastBricks(List<List<Integer>> wall) {
-        int minCuts = wall.size();
-        Map<Integer, Integer> map = new HashMap<>();
-
-        for (List<Integer> row : wall) {
-            int sum = 0;
-            for (int i = 0; i < row.size() - 1; i++) {
-                sum += row.get(i);
-
                 // counter add by 1
                 map.put(sum, map.getOrDefault(sum, 0) + 1);
 
