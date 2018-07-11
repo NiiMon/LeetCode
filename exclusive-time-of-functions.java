@@ -104,32 +104,33 @@ class Solution {
 
 
 // version 2
-public class Solution {
+class Solution {
     public int[] exclusiveTime(int n, List<String> logs) {
-        int[] res = new int[n];
         Stack<Integer> stack = new Stack<>();
-        int prevTime = 0;
-        for (String log : logs) {
-            String[] parts = log.split(":");
+        int[] result = new int[n];
+        int last = 0;
 
-            int id = Integer.parseInt(parts[0]);
-            String action = parts[1];
-            int timestamp = Integer.parseInt(parts[2]);
+        for (String log : logs) {
+            String[] info = log.split(":");
+
+            int id = Integer.valueOf(info[0]);
+            String action = info[1];
+            int timestamp = Integer.valueOf(info[2]);
 
             if (stack.size() > 0) {
-                res[stack.peek()] += timestamp - prevTime; 
+                result[stack.peek()] += timestamp - last;
             }
-            prevTime = timestamp;
+            last = timestamp;
 
             if (action.equals("start")) {
                 stack.push(id);
-            }
-            else {
-                res[stack.pop()]++;
-                prevTime++;
+            } else {
+                result[stack.pop()]++;
+                last++;
             }
         }
-        return res;
+
+        return result;
     }
 }
 // 120 / 120 test cases passed.
