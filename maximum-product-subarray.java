@@ -32,6 +32,7 @@ Test cases:
 
 */
 
+// version 1
 class Solution {
     public int maxProduct(int[] a) {
         if (a.length == 0) {
@@ -75,6 +76,28 @@ class Solution {
             }
         }
         return max;
+    }
+}
+// 184 / 184 test cases passed.
+// Runtime: 2 ms
+
+
+// version 2
+class Solution {
+    public int maxProduct(int[] a) {
+        int gMax = 1;
+        int gMin = 1;
+        int result = Integer.MIN_VALUE;
+
+        for (int val : a) {
+            int max = Math.max(val, Math.max(val * gMax, val * gMin));
+            int min = Math.min(val, Math.min(val * gMax, val * gMin));
+            gMax = max;
+            gMin = min;
+            result = Math.max(result, gMax);
+        }
+
+        return result;
     }
 }
 // 184 / 184 test cases passed.
