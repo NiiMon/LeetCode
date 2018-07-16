@@ -52,35 +52,23 @@ class Solution {
 
         // general case : non-leaf node
         Result leftResult = node.left == null ? 
-        new Result(true, 0, Integer.MIN_VALUE, Integer.MIN_VALUE) :
+        new Result(true, 0, node.val, Integer.MIN_VALUE) :
         dfs(node.left);
 
         Result rightResult = node.right == null ?
-        new Result(true, 0, Integer.MAX_VALUE, Integer.MAX_VALUE) :
+        new Result(true, 0, Integer.MAX_VALUE, node.val) :
         dfs(node.right);
 
         boolean isBST = leftResult._isBST && rightResult._isBST &&
         leftResult._max < node.val && node.val < rightResult._min;
 
-        int size = max(leftResult._size, rightResult._size, 
-        isBST ? leftResult._size + rightResult._size + 1 : 0);
+        int size = isBST ? leftResult._size + rightResult._size + 1 :
+        Math.max(leftResult._size, rightResult._size);
 
-        int min = node.left == null ? node.val : leftResult._min;
-        int max = node.right == null ? node.val : rightResult._max;
+        int min = leftResult._min;
+        int max = rightResult._max;
 
         return new Result(isBST, size, min, max);
-    }
-
-    private int max(int... input) {
-        int result = input[0];
-        
-        for (int i : input) {
-            if (i > result) {
-                result = i;
-            }
-        }
-
-        return result;
     }
 
     class Result {
