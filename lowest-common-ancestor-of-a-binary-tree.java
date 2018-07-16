@@ -62,7 +62,6 @@ class Solution {
         if (node == null) {
             return new Result(null, false, false);
         }
-
         
         // general case: non-leaf node
         Result leftResult = helper(node.left, p, q);
@@ -71,15 +70,12 @@ class Solution {
         boolean hasP = leftResult._hasP || rightResult._hasP || node == p;
         boolean hasQ = leftResult._hasQ || rightResult._hasQ || node == q;
         
-        TreeNode ancestor = leftResult._ancestor != null ? leftResult._ancestor :
-        rightResult._ancestor != null ? rightResult._ancestor : null;
-
-        if (ancestor == null &&
-        leftResult._hasP && rightResult._hasQ || 
-        leftResult._hasQ && rightResult._hasP ||
-        (leftResult._hasP || rightResult._hasP) && node == q ||
-        (leftResult._hasQ || rightResult._hasQ) && node == p) {
-            ancestor = node;
+        TreeNode ancestor = node;
+        if (leftResult._hasP && leftResult._hasQ) {
+            ancestor = leftResult._ancestor;
+        }
+        if (rightResult._hasP && rightResult._hasQ) {
+            ancestor = rightResult._ancestor;
         }
 
         return new Result(ancestor, hasP, hasQ);
