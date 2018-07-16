@@ -45,28 +45,24 @@ class Solution {
     }
 
     private Result dfs(TreeNode node) {
-        // base case : leaf node
-        if (node.left == null && node.right == null) {
-            return new Result(true, 1, node.val, node.val);
+        // base case : null
+        if (node == null ) {
+            return new Result(true, 0, 0, 0);
         }
 
         // general case : non-leaf node
-        Result leftResult = node.left == null ? 
-        new Result(true, 0, node.val, Integer.MIN_VALUE) :
-        dfs(node.left);
-
-        Result rightResult = node.right == null ?
-        new Result(true, 0, Integer.MAX_VALUE, node.val) :
-        dfs(node.right);
+        Result leftResult = dfs(node.left);
+        Result rightResult = dfs(node.right);
 
         boolean isBST = leftResult._isBST && rightResult._isBST &&
-        leftResult._max < node.val && node.val < rightResult._min;
+        (node.left == null || leftResult._max < node.val) && 
+        (node.right == null || node.val < rightResult._min);
 
         int size = isBST ? leftResult._size + rightResult._size + 1 :
         Math.max(leftResult._size, rightResult._size);
 
-        int min = leftResult._min;
-        int max = rightResult._max;
+        int min = node.left == null ? node.val : leftResult._min;
+        int max = node.right == null ? node.val : rightResult._max;
 
         return new Result(isBST, size, min, max);
     }
