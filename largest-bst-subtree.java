@@ -50,7 +50,7 @@ class Solution {
             return new Result(true, 0, 0, 0);
         }
 
-        // general case : non-leaf node
+        // general case : non-null node
         Result leftResult = dfs(node.left);
         Result rightResult = dfs(node.right);
 
