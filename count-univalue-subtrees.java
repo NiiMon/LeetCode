@@ -34,12 +34,9 @@ Output: 4
  */
 class Solution {
     public int countUnivalSubtrees(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-
         return helper(root)._count;
     }
+
     private Result helper(TreeNode node) {
         // base case : null
         if (node == null) {
@@ -57,8 +54,6 @@ class Solution {
 
         return new Result(isUni, count);
     }
-
-
 
     class Result {
         boolean _isUni;
