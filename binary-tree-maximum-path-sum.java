@@ -41,53 +41,46 @@ Output: 42
  *     TreeNode(int x) { val = x; }
  * }
  */
-class Solution {
+public class Solution {
     public int maxPathSum(TreeNode root) {
-        return dfs(root)._maxSumPath;
+        return dfs(root)._globalMax;
     }
 
     private Result dfs(TreeNode node) {
-        // base case : null
+        // base case: null node
         if (node == null) {
-            return new Result(Integer.MIN_VALUE, Integer.MIN_VALUE);
+            return new Result(0, Integer.MIN_VALUE);
         }
-
-        // general case : non-null node
+        
+        // general case: non-null node
         Result leftResult = dfs(node.left);
         Result rightResult = dfs(node.right);
         
-        int maxSumToRoot = node.val + max(0, leftResult._maxSumToRoot, 
-            rightResult._maxSumToRoot);
-
-        int maxSumPath = max(maxSumToRoot, 
-            leftResult._maxSumPath, rightResult._maxSumPath, 
-            Math.max(0, leftResult._maxSumToRoot) + 
-            Math.max(0, rightResult._maxSumToRoot) + node.val);
-
+        int toRootMax = max(node.val,
+                           node.val + leftResult._toRootMax,
+                           node.val + rightResult._toRootMax);
+        int globalMax = max(toRootMax,
+                           leftResult._globalMax,
+                           rightResult._globalMax,
+                           leftResult._toRootMax + node.val + rightResult._toRootMax);
         
-
-        return new Result(maxSumToRoot, maxSumPath);
+        return new Result(toRootMax, globalMax);
     }
 
-    private int max(int... input) {
-        int result = input[0];
-
-        for (int i : input) {
-            if (i > result) {
-                result = i;
-            }
+    private int max(int... vals) {
+        int result = vals[0];
+        for (int val : vals) {
+            result = Math.max(result, val);
         }
-
         return result;
     }
 
     class Result {
-        int _maxSumToRoot;
-        int _maxSumPath;
-
-        public Result(int maxSumToRoot, int maxSumPath) {
-            _maxSumToRoot   = maxSumToRoot;
-            _maxSumPath     = maxSumPath;
+        int _toRootMax;
+        int _globalMax;
+        public Result(int toRootMax, int globalMax) {
+            _toRootMax = toRootMax;
+            _globalMax = globalMax;
         }
     }
 }
