@@ -51,19 +51,16 @@ p and q are different and both values will exist in the binary tree.
  */
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if (root == null) {
-            return null;
-        }
-
         return helper(root, p, q)._ancestor;
     }
+
     private Result helper(TreeNode node, TreeNode p, TreeNode q) {
-        // base case : null
+        // base case: null
         if (node == null) {
             return new Result(null, false, false);
         }
         
-        // general case: non-leaf node
+        // general case: non-null
         Result leftResult = helper(node.left, p, q);
         Result rightResult = helper(node.right, p, q);
         
