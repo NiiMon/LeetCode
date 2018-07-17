@@ -24,6 +24,8 @@ You may assume both s and t have the same length.
 
 */
 
+
+// hashmap version
 class Solution {
     public boolean isIsomorphic(String s, String t) {
         return helper(s, t) && helper(t, s);
@@ -46,4 +48,33 @@ class Solution {
         return true;
     }
 }
+// 30 / 30 test cases passed.
+// Runtime: 10 ms
+
+
+
+// int array version
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        return helper(s, t) && helper(t, s);
+    }
+    private boolean helper(String s, String t) {
+        // there are 256 characters in ASCII
+        // null in ASCII has value of 0
+        int[] map = new int[256];
+        
+        for (int i = 0; i < s.length(); i++) {
+            if (map[s.charAt(i)] == 0) {
+                map[s.charAt(i)] = t.charAt(i);
+            } else if (map[s.charAt(i)] != t.charAt(i)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+}
+// 30 / 30 test cases passed.
+// Runtime: 6 ms
+
 
