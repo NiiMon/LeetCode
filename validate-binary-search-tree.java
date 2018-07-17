@@ -21,7 +21,7 @@ Input:
 Output: true
 
 Example 2:
-
+Input:
     5
    / \
   1   4
