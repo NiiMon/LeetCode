@@ -37,7 +37,7 @@ Each answers[i] will be an integer in the range [0, 999].
 
 */
 
-
+// math version
 class Solution {
     public int numRabbits(int[] answers) {
         Map<Integer, Integer> map = new HashMap<>();
@@ -59,3 +59,30 @@ class Solution {
 // 54 / 54 test cases passed.
 // Runtime: 6 ms
 
+
+// hashmap version
+class Solution {
+    public int numRabbits(int[] answers) {
+        int result = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int ans : answers) {
+            int sum = ans + 1;
+
+            map.put(sum, map.getOrDefault(sum, 0) + 1);
+
+            if (map.get(sum) == sum) {
+                result += sum;
+                map.remove(sum);
+            }
+        }
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            result += entry.getKey();
+        }
+
+        return result;
+    }
+}
+// 54 / 54 test cases passed.
+// Runtime: 7 ms
