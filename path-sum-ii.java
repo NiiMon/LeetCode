@@ -42,6 +42,8 @@ Return:
  *     TreeNode(int x) { val = x; }
  * }
  */
+
+// dfs bottom-up
 class Solution {
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
         List<List<Integer>> result = new ArrayList<>();
@@ -74,5 +76,44 @@ class Solution {
 }
 // 114 / 114 test cases passed.
 // Runtime: 4 ms
+
+
+
+// dfs top-down
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> result = new ArrayList();
+        if (root == null) {
+            return result;
+        }
+        Stack<Integer> path = new Stack<>();
+        dfs(root, sum, path, result);
+        return result;
+    }
+    private void dfs(TreeNode node, int sum, Stack<Integer> path, List<List<Integer>> result) {
+        // 1. op at node
+        path.push(node.val);
+
+        // 2. op at leaf node
+        if (node.left == null && node.right == null) {
+            if (sum == node.val) {
+                result.add(new ArrayList<>(path));
+            }
+        }
+
+        // 3. go down to children
+        if (node.left != null) {
+            dfs(node.left, sum - node.val, path, result);
+        }
+        if (node.right != null) {
+            dfs(node.right, sum - node.val, path, result);
+        }
+
+        // 4. go up to parent
+        path.pop();
+    }
+}
+// 114 / 114 test cases passed.
+// Runtime: 2 ms
 
 
