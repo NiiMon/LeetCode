@@ -90,3 +90,41 @@ class Solution {
 // Runtime: 1 ms
 
 
+
+// dfs top-down
+class Solution {
+    public int sumNumbers(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        int[] result = new int[1];
+        dfs(root, 0, result);
+        return result[0];
+    }
+    private void dfs(TreeNode node, int sum, int[] result) {
+        // 1. op at node
+        sum = sum * 10 + node.val;
+
+        // 2. op at leaf
+        if (node.left == null && node.right == null) {
+            result[0] += sum;
+        }
+
+        // 3. go down to children
+        if (node.left != null) {
+            dfs(node.left, sum, result);
+        }
+        if (node.right != null) {
+            dfs(node.right, sum, result);
+        }
+
+        // 4. go up to parent
+        // do nothing
+    }
+}
+
+// 110 / 110 test cases passed.
+// Runtime: 0 ms
+
+
