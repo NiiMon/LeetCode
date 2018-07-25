@@ -49,6 +49,8 @@ p and q are different and both values will exist in the binary tree.
  *     TreeNode(int x) { val = x; }
  * }
  */
+
+// dfs bottom-up
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         return helper(root, p, q)._ancestor;
@@ -91,5 +93,62 @@ class Solution {
 }
 // 31 / 31 test cases passed.
 // Runtime: 10 ms
+
+
+
+// dfs top-down
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) {
+            return null;
+        }
+
+        List<TreeNode> pList = new ArrayList<>();
+        List<TreeNode> qList = new ArrayList<>();
+        Stack<TreeNode> path = new Stack<>();
+        dfs(root, p, q, pList, qList, path);
+
+        // process pList and qList to get result
+        TreeNode result = null;
+        int start = 0;
+        int end = Math.min(pList.size(), qList.size()) - 1;
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            if (pList.get(mid) == qList.get(mid)) {
+                result = pList.get(mid);
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+        }
+
+        return result;
+    }
+    private void dfs(TreeNode node, TreeNode p, TreeNode q, List<TreeNode> pList, List<TreeNode> qList, Stack<TreeNode> path) {
+        // 1. op at node
+        path.push(node);
+
+        // 2. op at target node
+        if (node == p) {
+            pList.addAll(path);
+        }
+        if (node == q) {
+            qList.addAll(path);
+        }
+
+        // 3. go down to children
+        if (node.left != null) {
+            dfs(node.left, p, q, pList, qList, path);
+        }
+        if (node.right != null) {
+            dfs(node.right, p, q, pList, qList, path);
+        }
+
+        // 4. go up to parent
+        path.pop();
+    }
+}
+// 31 / 31 test cases passed.
+// Runtime: 12 ms
 
 
