@@ -43,6 +43,43 @@ its right child's value is 4.
  *     TreeNode(int x) { val = x; }
  * }
  */
+
+// DFS Top-Down
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        
+        boolean[] result = new boolean[]{true};
+        dfs(root, null, null, result);
+        return result[0];
+    }
+    private void dfs(TreeNode node, Integer min, Integer max, boolean[] result) {
+        // op at node
+        if ((min != null && min >= node.val) ||
+            (max != null && node.val >= max)) {
+            result[0] = false;
+            return;
+        }
+        
+        // go down to children
+        if (node.left != null) {
+            dfs(node.left, min, new Integer(node.val), result);
+        }
+        if (node.right != null) {
+            dfs(node.right, new Integer(node.val), max, result);
+        }
+        
+        // go up to parent
+        // do nothing
+    }
+}
+// 75 / 75 test cases passed.
+// Runtime: 0 ms
+
+
+// DFS Bottom-Up
 class Solution {
     public boolean isValidBST(TreeNode root) {
         return dfs(root)._isBST;
