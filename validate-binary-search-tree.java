@@ -120,4 +120,49 @@ class Solution {
 // Runtime: 1 ms
 
 
+// BFS
+class Solution {
+    class MyNode {
+        TreeNode _node;
+        Integer _min;
+        Integer _max;
+        public MyNode(TreeNode node, Integer min, Integer max) {
+            _node = node;
+            _min = min;
+            _max = max;
+        }
+    }
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        
+        Queue<MyNode> queue = new LinkedList<>();
+        queue.add(new MyNode(root, null, null));
+        while (!queue.isEmpty()) {
+            MyNode myNode = queue.remove();
+            
+            // op at node
+            if ((myNode._min != null && myNode._min >= myNode._node.val) ||
+               (myNode._max != null && myNode._node.val >= myNode._max)) {
+                return false;
+            }
+            
+            // go down to children
+            if (myNode._node.left != null) {
+                queue.add(new MyNode(myNode._node.left, 
+                    myNode._min, new Integer(myNode._node.val)));
+            }
+            if (myNode._node.right != null) {
+                queue.add(new MyNode(myNode._node.right, 
+                    new Integer(myNode._node.val), myNode._max));
+            }
+        }
+        
+        return true;
+    }
+}
+// 75 / 75 test cases passed.
+// Runtime: 3 ms
+
 
