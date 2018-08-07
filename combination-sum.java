@@ -74,3 +74,77 @@ class Solution {
 // Runtime: 13 ms
 
 
+
+// graph DFS Bottom-Up
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        if (candidates.length == 0) {
+            return new ArrayList<>();
+        }
+
+        Map<Key, List<List<Integer>>> saved = new HashMap<>();
+        return dfs(candidates.length - 1, target, candidates, saved);
+    }
+
+    private List<List<Integer>> dfs(int index, int target, int[] candidates,
+    Map<Key, List<List<Integer>>> saved) {
+    
+        Key node = new Key(index, target);
+        if (saved.containsKey(node)) {
+            return saved.get(node);
+        }
+
+        List<List<Integer>> result = new ArrayList<>();
+
+        // base case: leaf with answer
+        if (node._index >= 0 && node._target == 0) {
+            List<Integer> list = new ArrayList<>();
+            result.add(list);
+        }
+
+        // general case: non-leaf node
+        if (node._index >= 0 && node._target > 0) {
+
+            List<List<Integer>> leftResult = dfs(node._index, node._target -
+            candidates[node._index], candidates, saved);
+            
+            List<List<Integer>> rightResult = dfs(node._index - 1, node._target,
+            candidates, saved);
+            
+            for (List<Integer> list : leftResult) {
+                List<Integer> copy = new ArrayList<>(list);
+                copy.add(candidates[node._index]);
+                result.add(copy);
+            }
+            result.addAll(rightResult);
+        }
+
+        saved.put(node, result);
+        return result;
+    }
+
+    class Key {
+        int _index;
+        int _target;
+        public Key(int index, int target) {
+            _index = index;
+            _target = target;
+        }
+
+        @Override
+        public int hashCode() {
+            return 31 * _target + _index;
+        }
+
+        @Override
+        public boolean equals(Object that) {
+            return that != null && that instanceof Key &&
+                    ((Key)that)._index == _index &&
+                    ((Key)that)._target == _target;
+        }
+    }
+}
+// 168 / 168 test cases passed.
+// Runtime: 27 ms
+
+
