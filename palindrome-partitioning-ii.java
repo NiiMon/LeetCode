@@ -34,11 +34,11 @@ class Solution {
         
         int cut = Integer.MAX_VALUE;
         
-        // a[0->i] : 0
+        // if (a[0->i] is Pal) : 0,
         if (isPal[0][end]) {
             cut = 0;
         }
-        // a[p->i], 1 <= p <= i : f(a[0->p-1]) + 1
+        // if (a[p->i] is Pal) : f(a[0->p-1]) + 1, (1 <= p <= i)
         else {
             for (int p = 1; p <= end; p++) {
                 if (isPal[p][end]){
