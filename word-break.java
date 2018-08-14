@@ -45,7 +45,7 @@ class Solution {
         return dfs(s, s.length() - 1, dict, saved);
     }
     private boolean dfs(String s, int index, Set<String> dict, 
-    	Map<String, Boolean> saved) {
+    Map<String, Boolean> saved) {
         String cur = s.substring(0, index + 1);
         if (saved.containsKey(cur)) {
             return saved.get(cur);
@@ -57,8 +57,8 @@ class Solution {
             result = true;
         }
         for (int p = 1; p <= index && !result; p++) {
-            String last = s.substring(p, index + 1);
-            result = dict.contains(last) && dfs(s, p - 1, dict, saved);
+            result = dict.contains(s.substring(p, index + 1)) && 
+                dfs(s, p - 1, dict, saved);
         }
         
         saved.put(cur, result);
