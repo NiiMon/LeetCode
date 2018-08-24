@@ -45,23 +45,18 @@ class Solution {
     }
     private boolean walk(Node[] graph) {
         boolean[] visited = new boolean[graph.length];
-        dfs(graph, 0, visited);
-        for(boolean val : visited) {
-            if (!val) {
-                return false;
-            }
-        }
-        return true;
+        return dfs(graph, 0, visited) == graph.length;
     }
-    private void dfs(Node[] graph, int id, boolean[] visited) {
+    private int dfs(Node[] graph, int id, boolean[] visited) {
         if (visited[id]) {
-            return;
+            return 0;
         }
         visited[id] = true;
-
+        int sum = 1;
         for (int neighborId : graph[id]._neighborIds) {
-            dfs(graph, neighborId, visited);
+            sum += dfs(graph, neighborId, visited);
         }
+        return sum;
     }
     class Node {
         final int _id;
