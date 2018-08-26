@@ -74,3 +74,31 @@ class Solution {
 // Runtime: 49 ms
 
 
+// dp: iterative
+class Solution {
+    public int numFactoredBinaryTrees(int[] a) {
+        Arrays.sort(a);
+        Map<Integer, Long> saved = new HashMap<>();
+        for (int i = 0; i < a.length; i++) {
+            long num = 1;
+            for (int leftIndex = 0; leftIndex < i && 
+                 a[leftIndex] * a[leftIndex] <= a[i]; leftIndex++) {
+                int rightNum = a[i] / a[leftIndex];
+                if (a[i] % a[leftIndex] == 0 && saved.containsKey(rightNum)) {
+                    num += saved.get(a[leftIndex]) * saved.get(rightNum) *
+                            (a[leftIndex] != rightNum ? 2 : 1);
+                }
+            }
+            saved.put(a[i], num);
+        }
+
+        long sum = 0;
+        for (int n : saved.keySet()) {
+            sum += saved.get(n);
+        }
+        return (int)(sum % (Math.pow(10, 9) + 7));
+    }
+}
+// 47 / 47 test cases passed.
+// Runtime: 43 ms
+
