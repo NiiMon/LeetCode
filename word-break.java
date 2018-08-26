@@ -69,3 +69,29 @@ class Solution {
 // Runtime: 10 ms
 
 
+// iterative: building answer from left to right
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if (s.length() == 0) {
+            return true;
+        }
+        
+        Set<String> dict = new HashSet<>(wordDict);
+        List<Integer> start = new ArrayList<>();
+        start.add(0);
+        
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = 0; j < start.size(); j++) {
+                if (dict.contains(s.substring(start.get(j), i + 1))) {
+                    start.add(i + 1);
+                    break;
+                }
+            }
+        }
+        return start.get(start.size() - 1) == s.length();
+    }
+}
+// 36 / 36 test cases passed.
+// Runtime: 14 ms
+
+
