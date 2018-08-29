@@ -44,6 +44,7 @@ Return 3. The paths that sum to 8 are:
  *     TreeNode(int x) { val = x; }
  * }
  */
+// Tree DFS Bottom-Up
 class Solution {
     public int pathSum(TreeNode root, int sum) {
         if (root == null) {
@@ -90,4 +91,43 @@ class Solution {
 // 126 / 126 test cases passed.
 // Runtime: 77 ms
 
+
+// Tree DFS Top-Down: pre-sum
+class Solution {
+    public int pathSum(TreeNode root, int sum) {
+        if (root == null) {
+            return 0;
+        }
+        
+        int[] count = new int[1];
+        Map<Integer, Integer> preSum = new HashMap<>();
+        preSum.put(0, 1);
+        dfs(root, sum, count, preSum, 0);
+        
+        return count[0];
+    }
+    private void dfs(TreeNode node, int target, int[] count, 
+        Map<Integer, Integer> preSum, int pathSum) {
+        // op at node
+        pathSum += node.val;
+        count[0] += preSum.getOrDefault(pathSum - target, 0);
+        preSum.put(pathSum, preSum.getOrDefault(pathSum, 0) + 1);
+        
+        // go down to children
+        if (node.left != null) {
+            dfs(node.left, target, count, preSum, pathSum);
+        }
+        if (node.right != null) {
+            dfs(node.right, target, count, preSum, pathSum);
+        }
+        
+        // go up to parent
+        preSum.put(pathSum, preSum.get(pathSum) - 1);
+        if (preSum.get(pathSum) == 0) {
+            preSum.remove(pathSum);
+        }
+    }
+}
+// 126 / 126 test cases passed.
+// Runtime: 12 ms
 
