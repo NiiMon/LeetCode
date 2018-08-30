@@ -86,14 +86,14 @@ class Solution {
             }
 
             // if isWord
-            if (node._isWord && depth + 1 > result[0].length()) {
+            if (depth + 1 > result[0].length()) {
                 result[0] = sb.substring(0, depth + 1);
             }
         }
         
         // go down to children
         for (int i = 0; i < 26; i++) {
-            if (node._children[i] != null && node._isWord) {
+            if (node._children[i] != null && node._children[i]._isWord) {
                 dfs(node._children[i], sb, depth + 1, result);
             }
         }
