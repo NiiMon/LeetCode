@@ -42,55 +42,6 @@ Therefore, sum = 495 + 491 + 40 = 1026.
 */
 
 
-
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
-class Solution {
-    public int sumNumbers(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-        
-        int sum = 0;
-        for (int n : helper(root, 0)) {
-            sum += n;
-        }
-        
-        return sum;
-    }
-    private List<Integer> helper(TreeNode node, int prefix) {
-        List<Integer> result = new ArrayList<>();
-        
-        // base case: leaf node
-        if (node.left == null && node.right == null) {
-            result.add(prefix * 10 + node.val);
-            return result;
-        }
-        
-        // general case: non-leaf node
-        result.addAll(node.left == null ? 
-            new ArrayList<>() : 
-            helper(node.left, prefix * 10 + node.val));
-        
-        result.addAll(node.right == null ? 
-            new ArrayList<>() : 
-            helper(node.right, prefix * 10 + node.val));
-        
-        return result;
-    }
-}
-// 110 / 110 test cases passed.
-// Runtime: 1 ms
-
-
-
 // dfs top-down
 class Solution {
     public int sumNumbers(TreeNode root) {
