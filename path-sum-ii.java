@@ -96,10 +96,8 @@ class Solution {
         path.push(node.val);
 
         // 2. op at leaf node
-        if (node.left == null && node.right == null) {
-            if (sum == node.val) {
-                result.add(new ArrayList<>(path));
-            }
+        if (node.left == null && node.right == null && sum == node.val) {
+            result.add(new ArrayList<>(path));
         }
 
         // 3. go down to children
