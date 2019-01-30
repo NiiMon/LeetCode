@@ -53,21 +53,22 @@ class Solution {
         
         boolean[] result = new boolean[]{true};
         dfs(root, null, null, result);
+        
         return result[0];
     }
     private void dfs(TreeNode node, Integer min, Integer max, boolean[] result) {
-        // op at node
-        if ((min != null && min >= node.val) ||
+        // op at current node
+        if ((min != null && node.val <= min) ||
             (max != null && node.val >= max)) {
             result[0] = false;
             return;
         }
         
         // go down to children
-        if (node.left != null) {
+        if (result[0] && node.left != null) {
             dfs(node.left, min, new Integer(node.val), result);
         }
-        if (node.right != null) {
+        if (result[0] && node.right != null) {
             dfs(node.right, new Integer(node.val), max, result);
         }
         
