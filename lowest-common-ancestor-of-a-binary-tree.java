@@ -53,39 +53,32 @@ p and q are different and both values will exist in the binary tree.
 // dfs bottom-up
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        return helper(root, p, q)._ancestor;
+        return dfs(root, p, q)._LCA;
     }
-
-    private Result helper(TreeNode node, TreeNode p, TreeNode q) {
-        // base case: null
+    private Result dfs(TreeNode node, TreeNode p, TreeNode q) {
+        // base case: null node
         if (node == null) {
             return new Result(null, false, false);
         }
-        
-        // general case: non-null
-        Result leftResult = helper(node.left, p, q);
-        Result rightResult = helper(node.right, p, q);
-        
+
+        // general case: all nodes
+        Result leftResult = dfs(node.left, p, q);
+        Result rightResult = dfs(node.right, p, q);
+
         boolean hasP = leftResult._hasP || rightResult._hasP || node == p;
         boolean hasQ = leftResult._hasQ || rightResult._hasQ || node == q;
+        TreeNode LCA = leftResult._LCA != null ? leftResult._LCA :
+                        rightResult._LCA != null ? rightResult._LCA :
+                        hasP && hasQ ? node : null;
         
-        TreeNode ancestor = node;
-        if (leftResult._hasP && leftResult._hasQ) {
-            ancestor = leftResult._ancestor;
-        }
-        if (rightResult._hasP && rightResult._hasQ) {
-            ancestor = rightResult._ancestor;
-        }
-
-        return new Result(ancestor, hasP, hasQ);
+        return new Result(LCA, hasP, hasQ);
     }
-
     class Result {
-        TreeNode _ancestor;
+        TreeNode _LCA;
         boolean _hasP;
         boolean _hasQ;
-        public Result(TreeNode ancestor, boolean hasP, boolean hasQ) {
-            _ancestor = ancestor;
+        public Result(TreeNode LCA, boolean hasP, boolean hasQ) {
+            _LCA = LCA;
             _hasP = hasP;
             _hasQ = hasQ;
         }
