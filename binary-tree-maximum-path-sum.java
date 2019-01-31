@@ -41,46 +41,43 @@ Output: 42
  *     TreeNode(int x) { val = x; }
  * }
  */
-public class Solution {
+class Solution {
     public int maxPathSum(TreeNode root) {
         return dfs(root)._globalMax;
     }
-
     private Result dfs(TreeNode node) {
-        // base case: null node
+        // base case: null nodes
         if (node == null) {
-            return new Result(0, Integer.MIN_VALUE);
+            return new Result(Integer.MIN_VALUE, 0);
         }
-        
-        // general case: non-null node
+        // Integer.MIN_VALUE
+        // general case: non-null nodes
         Result leftResult = dfs(node.left);
         Result rightResult = dfs(node.right);
-        
-        int toRootMax = max(node.val,
-                           node.val + leftResult._toRootMax,
-                           node.val + rightResult._toRootMax);
-        int globalMax = max(toRootMax,
-                           leftResult._globalMax,
-                           rightResult._globalMax,
-                           leftResult._toRootMax + node.val + rightResult._toRootMax);
-        
-        return new Result(toRootMax, globalMax);
-    }
 
+        int localMax = node.val + max(0, leftResult._localMax, rightResult._localMax);
+        int globalMax = max(leftResult._globalMax, 
+                            rightResult._globalMax, 
+                            leftResult._localMax + node.val + rightResult._localMax,
+                            localMax);
+        
+        return new Result(globalMax, localMax);
+    }
     private int max(int... vals) {
         int result = vals[0];
         for (int val : vals) {
-            result = Math.max(result, val);
+            if (val > result) {
+                result = val;
+            }
         }
         return result;
     }
-
     class Result {
-        int _toRootMax;
         int _globalMax;
-        public Result(int toRootMax, int globalMax) {
-            _toRootMax = toRootMax;
+        int _localMax;
+        public Result(int globalMax, int localMax) {
             _globalMax = globalMax;
+            _localMax = localMax;
         }
     }
 }
