@@ -126,3 +126,44 @@ class Solution {
 // Runtime: 9 ms
 
 
+// version 2
+class Solution {
+    public boolean checkEqualTree(TreeNode root) {
+        // 1. get sum of the tree
+        int sum = getSum(root);
+        if (sum % 2 != 0) {
+            return false;
+        }
+        
+        // 2. dfs bottom-up to check if there is any subtree sum equals half of the tree sum
+        return dfs(root, root, sum / 2)._half;
+    }
+    private Result dfs(TreeNode node, TreeNode root, int target) {
+        if (node == null) {
+            return new Result(false, 0);
+        }
+
+        Result leftResult = dfs(node.left, root, target);
+        Result rightResult = dfs(node.right, root, target);
+
+        int sum = leftResult._sum + rightResult._sum + node.val;
+        boolean half = leftResult._half || rightResult._half || (node != root && sum == target);
+
+        return new Result(half, sum);
+    }
+    class Result {
+        boolean _half;
+        int _sum;
+        public Result(boolean half, int sum) {
+            _half = half;
+            _sum = sum;
+        }
+    }
+    private int getSum(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        
+        return getSum(node.left) + getSum(node.right) + node.val;
+    }
+}
