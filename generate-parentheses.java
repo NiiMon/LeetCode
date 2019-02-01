@@ -70,4 +70,40 @@ class Solution {
 // Runtime: 4 ms
 
 
+// version 2
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        if (n <= 0) {
+            result.add("");
+            return result;
+        }
+
+        dfs('(', n - 1, n, new StringBuilder(), result);
+
+        return result;
+    }
+    private void dfs(char p, int nL, int nR, StringBuilder sb, List<String> result) {
+        // 1. op at node
+        sb.append(p);
+
+        // 2. op at leaf
+        if (nR == 0) {
+            result.add(sb.toString());
+        }
+
+        // 3. go down to children
+        if (nL > 0) {
+            dfs('(', nL - 1, nR, sb, result);
+        }
+        if (nR > nL) {
+            dfs(')', nL, nR - 1, sb, result);
+        }
+
+        // 4. go up to parent
+        sb.deleteCharAt(sb.length() - 1);
+    }
+}
+// 8 / 8 test cases passed.
+// Runtime: 1 ms
 
