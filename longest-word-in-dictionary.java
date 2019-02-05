@@ -66,72 +66,74 @@ class Solution {
 
 // Trie implementation
 class Solution {
-    final private static char ROOT = '0';
     public String longestWord(String[] words) {
-        Trie root = buildTrie(words);
-        return walkTrie(root);
-    }
-    private String walkTrie(Trie root) {
-        String[] result = new String[]{""};
-        dfs(root, new StringBuilder(), -1, result);
-        return result[0];
-    }
-    private void dfs(Trie node, StringBuilder sb, int depth, String[] result) {
-        if (node._char != ROOT) {
-            // put char into sb
-            if (depth == sb.length()) {
-                sb.append(node._char);
-            } else {
-                sb.setCharAt(depth, node._char);
-            }
+        TrieNode trie = buildTrie(words);
 
-            // if isWord
-            if (depth + 1 > result[0].length()) {
-                result[0] = sb.substring(0, depth + 1);
-            }
-        }
-        
-        // go down to children
-        for (int i = 0; i < 26; i++) {
-            if (node._children[i] != null && node._children[i]._isWord) {
-                dfs(node._children[i], sb, depth + 1, result);
+        String[] answer = new String[]{""};
+        walkTrie(trie, new StringBuilder(), answer, 0);
+
+        return answer[0];
+    }
+    private void walkTrie(TrieNode node, StringBuilder path, String[] max, int depth) {
+        for (TrieNode child : node._children) {
+            if (child != null && child._isWord) {
+                // 1. op at node
+                path.append(child._letter);
+                
+                if (path.length() > max[0].length()) {
+                    max[0] = path.toString();
+                }
+
+                // 2. op at leaf
+                // do nothing
+
+                // 3. go down to children
+                walkTrie(child, path, max, depth + 1);
+
+                // 4. go up to parent
+                path.deleteCharAt(path.length() - 1);
             }
         }
-
-        // go up to parent
-        // do nothing
     }
-    private Trie buildTrie(String[] words) {
-        Trie root = new Trie(ROOT, true);
-
+    private TrieNode buildTrie(String[] words) {
+        TrieNode root = new TrieNode('0');
         for (String word : words) {
-            Trie node = root;
-            for (int i = 0; i < word.length(); i++) {
-                char c = word.charAt(i);
-                if (node._children[c - 'a'] == null) {
-                    Trie child = new Trie(c, false);
-                    node._children[c - 'a'] = child;
-                }
-                node = node._children[c - 'a'];
-                if (i == word.length() - 1) {
-                    node._isWord = true;
-                }
-            }
+            dfs(root, word, 0);
         }
-
         return root;
     }
-    class Trie {
-        char _char;
+    private void dfs(TrieNode node, String word, int index) {
+        // 1. op at node
+        char letter = word.charAt(index);
+        if (node._children[letter - 'a'] == null) {
+            node._children[letter - 'a'] = new TrieNode(letter);
+        }
+        node = node._children[letter - 'a'];
+
+        // 2. op at leaf
+        if (index == word.length() - 1) {
+            node._isWord = true;
+            return;
+        }
+
+        // 3. go down to children
+        dfs(node, word, index + 1);
+
+        // 4. go up to parent
+        // do nothing
+    }
+    class TrieNode {
+        char _letter;
         boolean _isWord;
-        Trie[] _children;
-        public Trie(char c, boolean w) {
-            _char = c;
-            _isWord = w;
-            _children = new Trie[26];
+        TrieNode[] _children;
+        public TrieNode(char letter) {
+            _letter = letter;
+            _isWord = false;
+            _children = new TrieNode[26];
         }
     }
 }
 // 57 / 57 test cases passed.
-// Runtime: 17 ms
-
+// Status: Accepted
+// Runtime: 9 ms
+// Memory Usage: 28.6 MB
