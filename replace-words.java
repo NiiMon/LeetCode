@@ -31,64 +31,83 @@ The input will only have lower-case letters.
 // Trie implementation
 class Solution {
     public String replaceWords(List<String> dict, String sentence) {
-        if (dict.isEmpty()) {
-            return sentence;
+        TrieNode trie = buildTrie(dict);
+
+        String[] words = sentence.split(" ");
+        for (int i = 0; i < words.length; i++) {
+            String[] result = new String[]{words[i]};
+            walkTrie(trie, words[i], 0, new StringBuilder(), result);
+            words[i] = result[0];
         }
-        
-        Trie root = buildTrie(dict);
-        List<String> result = new ArrayList<>();
-        for (int i = 0, start = 0; i <= sentence.length(); i++) {
-            if (i == sentence.length() || 
-                (sentence.charAt(i) == ' ' && i > start)) {
-                result.add(walkTrie(root, sentence.substring(start, i)));
-                start = i + 1;
-            }
-        }
-        
-        return String.join(" ", result);
+
+        return String.join(" ", words);
     }
-    private String walkTrie(Trie root, String word) {
-        for (int i = 0; i < word.length(); i++) {
-            char c = word.charAt(i);
-            if (root._children[c - 'a'] == null) {
-                return word;
-            }
-            root = root._children[c - 'a'];
-            if (root._isWord) {
-                return word.substring(0, i + 1);
-            }
+    private void walkTrie(TrieNode node, String word, int index, StringBuilder sb, String[] result) {
+        // 1. op at node
+        char letter = word.charAt(index);
+        if (node._children[letter - 'a'] == null) {
+            return;
         }
-        return word;
-    }
-    private Trie buildTrie(List<String> dict) {
-        Trie root = new Trie(false);
+        sb.append(letter);
+        node = node._children[letter - 'a'];
+
+        if (node._isWord) {
+            result[0] = sb.toString();
+            return;
+        }
+
+        if (index == word.length() - 1) {
+            return;
+        }
+
+        // 2. op at leaf
+        // 3. go down to children
+        walkTrie(node, word, index + 1, sb, result);
         
+        // 4. go up to parent
+        sb.deleteCharAt(sb.length() - 1);
+    }
+    private TrieNode buildTrie(List<String> dict) {
+        TrieNode root = new TrieNode('0');
         for (String word : dict) {
-            Trie node = root;
-            for (int i = 0; i < word.length(); i++) {
-                char c = word.charAt(i);
-                if (node._children[c - 'a'] == null) {
-                    node._children[c - 'a'] = new Trie(false);
-                }
-                node = node._children[c - 'a'];
-                if (i == word.length() - 1) {
-                    node._isWord = true;
-                }
-            }
+            dfs(root, word, 0);
         }
-        
         return root;
     }
-    class Trie {
+    private void dfs(TrieNode node, String word, int index) {
+        // 1. op at node
+        char letter = word.charAt(index);
+        if (node._children[letter - 'a'] == null) {
+            node._children[letter - 'a'] = new TrieNode(letter);
+        }
+        node = node._children[letter - 'a'];
+
+        // 2. op at leaf
+        if (index == word.length() - 1) {
+            node._isWord = true;
+            return;
+        }
+
+        // 3. go down to children
+        dfs(node, word, index + 1);
+
+        // 4. go up to parent
+        // do nothing
+    }
+    class TrieNode {
+        char _letter;
         boolean _isWord;
-        Trie[] _children;
-        public Trie(boolean w) {
-            _isWord = w;
-            _children = new Trie[26];
+        TrieNode[] _children;
+        public TrieNode(char letter) {
+            _letter = letter;
+            _isWord = false;
+            _children = new TrieNode[26];
         }
     }
 }
 // 124 / 124 test cases passed.
-// Runtime: 28 ms
+// Status: Accepted
+// Runtime: 13 ms
+// Memory Usage: 41 MB
 
 
