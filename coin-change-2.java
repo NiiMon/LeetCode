@@ -44,54 +44,54 @@ class Solution {
         if (amount == 0) {
             return 1;
         }
-        Map<Key, Integer> saved = new HashMap<>();
-        return dfs(coins.length - 1, amount, coins, saved);
-    }
-
-    private int dfs(int index, int amount, int[] coins, Map<Key, Integer> saved) {
-
-        Key node = new Key(index, amount);
-        if (saved.containsKey(node)) {
-            return saved.get(node);
-        }
-
-        // base case: leaf
-        if (index >= 0 && amount == 0) {
-            return 1;
-        }
-        if (index < 0 || amount < 0) {
+        if (coins.length == 0) {
             return 0;
         }
 
-        // general case: non-leaf
-        int leftResult = dfs(index, amount - coins[index], coins, saved);
-        int rightResult = dfs(index - 1, amount, coins, saved);
-        int num = leftResult + rightResult;
+        Arrays.sort(coins);
 
-        saved.put(node, num);
-        return num;
+        return dfs(coins, coins.length - 1, amount, new HashMap<>());
+    }
+    private int dfs(int[] coins, int index, int amount, 
+                    Map<Key, Integer> saved) {
+        Key key = new Key(index, amount);
+        if (saved.containsKey(key)) {
+            return saved.get(key);
+        }
+
+        int result = 0;
+
+        if (amount != 0 && amount < coins[0] || index < 0) {
+            // do nothing
+        } else if (amount == 0) {
+            result = 1;
+        } else {
+            result += dfs(coins, index, amount - coins[index], saved) +
+                      dfs(coins, index - 1, amount, saved);
+        }
+
+        saved.put(key, result);
+        return result;
     }
     class Key {
-        int _index;
         int _amount;
-        public Key(int index, int amount) {
-            _index = index;
+        int _index;
+        public Key(int amount, int index) {
             _amount = amount;
+            _index = index;
         }
-
-        @Override
         public int hashCode() {
-            return 31 *_amount + _index;
+            return _index * 31 + _amount;
         }
-
-        @Override
         public boolean equals(Object that) {
-            return that != null && that instanceof Key &&
+            return that instanceof Key &&
                     ((Key)that)._index == _index &&
                     ((Key)that)._amount == _amount;
         }
     }
 }
 // 27 / 27 test cases passed.
-// Runtime: 47 ms
+// Status: Accepted
+// Runtime: 35 ms
+// Memory Usage: 37.1 MB
 
