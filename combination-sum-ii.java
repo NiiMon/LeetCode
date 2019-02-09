@@ -42,48 +42,45 @@ class Solution {
             result.add(new ArrayList<>());
             return result;
         }
+
         Arrays.sort(candidates);
-        Map<Key, List<List<Integer>>> saved = new HashMap<>();
-        return dfs(candidates.length - 1, target, candidates, saved);
+
+        return dfs(candidates, candidates.length - 1, target, new HashMap<>());
     }
-    private List<List<Integer>> dfs(int index, int target, int[] candidates, 
+    private List<List<Integer>> dfs(int[] candidates, int index, int target,
                                     Map<Key, List<List<Integer>>> saved) {
-        Key node = new Key(index, target);
-        if (saved.containsKey(node)) {
-            return saved.get(node);
+        Key key = new Key(index, target);
+        if (saved.containsKey(key)) {
+            return saved.get(key);
         }
 
         List<List<Integer>> result = new ArrayList<>();
 
         // answer node
         if (target == 0) {
-            List<Integer> list = new ArrayList<>();
-            result.add(list);
+            result.add(new ArrayList<>());
         }
         // keep looking
-        if (index >= 0 && target > 0) {
-            List<List<Integer>> leftResult = dfs(index - 1, 
-                                                 target - candidates[index], 
-                                                 candidates, saved);
+        if (index >= 0 && target >= candidates[0]) {
+            // left
+            for (List<Integer> list : dfs(candidates, index - 1, 
+                                          target - candidates[index], saved)) {
+                List<Integer> copy = new ArrayList<>(list);
+                copy.add(candidates[index]);
+                result.add(copy);
+            }
+
+            // right
             int nextIndex = index;
             while (nextIndex >= 0 && 
                    candidates[nextIndex] == candidates[index]) {
                 nextIndex--;
             }
-            List<List<Integer>> rightResult = dfs(nextIndex, target, 
-                                                  candidates, saved);
-            
-            // op at node
-            for (List<Integer> list : leftResult) {
-                List<Integer> copy = new ArrayList<>(list);
-                copy.add(candidates[index]);
-                result.add(copy);
-            }
-            result.addAll(rightResult);
+            result.addAll(dfs(candidates, nextIndex, target, saved));
         }
 
         // save to hashmap
-        saved.put(node, result);
+        saved.put(key, result);
         return result;
     }
     class Key {
@@ -108,5 +105,7 @@ class Solution {
     }
 }
 // 172 / 172 test cases passed.
-// Runtime: 26 ms
+// Status: Accepted
+// Runtime: 12 ms
+// Memory Usage: 31.2 MB
 
