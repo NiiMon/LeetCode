@@ -47,65 +47,59 @@ the gap between the 5th and 6th stone is too large.
 // Graph DFS Bottom-Up
 class Solution {
     public boolean canCross(int[] stones) {
-        if (stones.length == 0) {
-            return false;
-        }
-        
-        Set<Integer> stoneSet = new HashSet<>();
+        Set<Integer> set = new HashSet<>();
         for (int stone : stones) {
-            stoneSet.add(stone);
+            set.add(stone);
         }
-        Map<Key, Boolean> saved = new HashMap<>();
-        
-        return dfs(stones, 0, 0, stoneSet, saved);
+        return dfs(set, stones[stones.length - 1], 0, 0, new HashMap<>());
     }
-    private boolean dfs(int[] stones, int pos, int step, 
-                        Set<Integer> stoneSet, Map<Key, Boolean> saved) {
-        Key key = new Key(pos, step);
+    private boolean dfs(Set<Integer> stones, int target, int curStone, 
+                        int stepLength, Map<Key, Boolean> saved) {
+        Key key = new Key(curStone, stepLength);
         if (saved.containsKey(key)) {
             return saved.get(key);
         }
-        
+
         boolean result = false;
-        
-        if (!stoneSet.contains(pos)) {
-            // base case: miss
-            result = false;
-        } else if (stoneSet.contains(pos) && pos == stones[stones.length - 1]) {
-            // base case: hit and last
+
+        if (curStone == target) {
             result = true;
         } else {
-            // general case: hit but not last
-            for (int k = Math.max(1, step - 1); k <= step + 1 && !result; k++) {
-                result = dfs(stones, pos + k, k, stoneSet, saved);
+            for (int childStep = Math.max(stepLength - 1, 1); 
+                 childStep <= stepLength + 1 && !result; childStep++) {
+                if (stones.contains(curStone + childStep)) {
+                    result = dfs(stones, target, curStone + childStep, childStep, saved);
+                }
             }
         }
-        
+
         saved.put(key, result);
         return result;
     }
     class Key {
-        int _pos;
+        int _stone;
         int _step;
-        public Key(int pos, int step) {
-            _pos = pos;
+        public Key(int stone, int step) {
+            _stone = stone;
             _step = step;
         }
 
         @Override
         public int hashCode() {
-            return 31 * _pos + _step;
+            return _stone * 31 + _step;
         }
 
         @Override
         public boolean equals(Object that) {
-            return that != null && that instanceof Key &&
-                    ((Key)that)._pos == _pos &&
-                    ((Key)that)._step == _step;
+            return that instanceof Key &&
+                   ((Key)that)._stone == _stone &&
+                   ((Key)that)._step == _step;
         }
     }
 }
 // 39 / 39 test cases passed.
-// Runtime: 34 ms
+// Status: Accepted
+// Runtime: 31 ms
+// Memory Usage: 33.6 MB
 
 
