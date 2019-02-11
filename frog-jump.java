@@ -68,7 +68,8 @@ class Solution {
             for (int childStep = Math.max(stepLength - 1, 1); 
                  childStep <= stepLength + 1 && !result; childStep++) {
                 if (stones.contains(curStone + childStep)) {
-                    result = dfs(stones, target, curStone + childStep, childStep, saved);
+                    result = dfs(stones, target, curStone + childStep, 
+                                 childStep, saved);
                 }
             }
         }
