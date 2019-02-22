@@ -44,48 +44,47 @@ transformation.
 */
 
 class Solution {
-    public int ladderLength(String beginWord, String endWord, 
-    	List<String> wordList) {
-
-        Set<String> dict = new HashSet<>(wordList);
-        if(!dict.contains(endWord)) {
-            return 0;
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Set<String> dict = new HashSet<>();
+        for (String word : wordList) {
+            dict.add(word);
         }
         
         Queue<String> queue = new LinkedList<>();
         Set<String> added = new HashSet<>();
         queue.add(beginWord);
         added.add(beginWord);
-        int level = 1;
-        
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-        
-            while (size-- > 0) {
-                String word = queue.remove();
+
+        int len = 1;
+
+        while (queue.size() > 0) {
+        	int size = queue.size();
+        	for (int i = 0; i < size; i++) {
+        		String cur = queue.remove();
                 
-                for (int i = 0; i < word.length(); i++) {
-                    for (char c = 'a'; c <= 'z'; c++) {
-                        String childWord = word.substring(0, i) + c 
-                        + word.substring(i + 1);
-                        if (dict.contains(childWord) &&
-                         !added.contains(childWord)) {
-                            if (childWord.equals(endWord)) {
-                                return level + 1;
+        		for (int index = 0; index < cur.length(); index++) {
+                    char[] word = cur.toCharArray();
+        			for (char letter = 'a'; letter <= 'z'; letter++) {
+                        word[index] = letter;
+        				String child = new String(word);
+                        if (dict.contains(child)) {
+                            if (child.equals(endWord)) {
+                                return len + 1;
                             }
-                            queue.add(childWord);
-                            added.add(childWord);
+                            if (added.add(child)) {
+                                queue.add(child);
+                            }
                         }
-                    }
-                }
-            }
-            level++;
+        			}
+        		}
+        	}
+        	len++;
         }
-        
         return 0;
     }
 }
 // 39 / 39 test cases passed.
-// Runtime: 150 ms
-
+// Status: Accepted
+// Runtime: 96 ms
+// Memory Usage: 42.2 MB
 
