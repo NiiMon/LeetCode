@@ -75,44 +75,50 @@ class Solution {
 // dp: iterative
 class Solution {
     public int minCut(String s) {
-        if (s.length() == 0) {
+        if (s.length() <= 1) {
             return 0;
         }
         
-        int[] dp = new int[s.length()];
-        boolean[][] isPal = getPal(s);
+        int[] result = new int[s.length()];
+        boolean[][] isPal = calcPal(s);
+
         for (int i = 0; i < s.length(); i++) {
             if (isPal[0][i]) {
-                dp[i] = 0;
+                result[i] = 0;
             } else {
-                dp[i] = Integer.MAX_VALUE;
-                for (int p = 1; p <= i; p++) {
-                    if (isPal[p][i]) {
-                        dp[i] = Math.min(dp[i], dp[p - 1] + 1);
+                result[i] = Integer.MAX_VALUE;
+                for (int k = 1; k <= i; k++) {
+                    if (isPal[k][i]) {
+                        result[i] = Math.min(result[i], result[k - 1] + 1);
                     }
                 }
             }
         }
-        return dp[s.length() - 1];
+
+        return result[result.length - 1];
     }
-    private boolean[][] getPal(String s) {
-        final int n = s.length();
-        boolean[][] isPal = new boolean[n][n];
-        for (int j = 0; j < n; j++) {
+    private boolean[][] calcPal(String s) {
+        final int len = s.length();
+        boolean[][] result = new boolean[len][len];
+        for (int j = 0; j < len; j++) {
             for (int i = j; i >= 0; i--) {
                 if (i == j) {
-                    isPal[i][j] = true;
-                } else if (i + 1 == j || i + 1 == j - 1) {
-                    isPal[i][j] = s.charAt(i) == s.charAt(j);
+                    result[i][j] = true;
+                } else if (i == j - 1) {
+                    result[i][j] = s.charAt(i) == s.charAt(j);
                 } else {
-                    isPal[i][j] = s.charAt(i) == s.charAt(j) && isPal[i+1][j-1];
+                    result[i][j] = s.charAt(i) == s.charAt(j) &&
+                                   result[i + 1][j - 1];
                 }
             }
         }
-        return isPal;
+        return result;
     }
 }
 // 29 / 29 test cases passed.
-// Runtime: 22 ms
+// Status: Accepted
+// Runtime: 15 ms
+// Memory Usage: 34.6 MB
+
 
 
