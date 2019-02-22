@@ -29,6 +29,7 @@ The length of the given matchstick array will not exceed 15.
 
 */
 
+// iterate nums and assign matches to possible slot
 class Solution {
     public boolean makesquare(int[] nums) {
         if (nums.length < 4) {
