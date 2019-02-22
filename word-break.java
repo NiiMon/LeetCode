@@ -69,6 +69,39 @@ class Solution {
 // Runtime: 10 ms
 
 
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if (s.length() == 0) {
+            return true;
+        }
+
+        Set<String> dict = new HashSet<>();
+        for (String word : wordDict) {
+            dict.add(word);
+        }
+
+        boolean[] result = new boolean[s.length()];
+
+        for (int i = 0; i < s.length(); i++) {
+            if (dict.contains(s.substring(0, i + 1))) {
+                result[i] = true;
+            }
+            for (int k = 1; !result[i] && k <= i; k++) {
+                if (result[k - 1] && dict.contains(s.substring(k, i + 1))) {
+                    result[i] = true;
+                }
+            }
+        }
+
+        return result[result.length - 1];
+    }
+}
+// 36 / 36 test cases passed.
+// Status: Accepted
+// Runtime: 7 ms
+// Memory Usage: 37.6 MB
+
+
 // iterative: building answer from left to right
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
