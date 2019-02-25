@@ -26,43 +26,44 @@ Output: 3
 
 */
 
+
+// dfs: dig land to water
 class Solution {
-    final static char WATER = '0';
-    final static char LAND = '1';
     public int numIslands(char[][] grid) {
-        final int n = grid.length;
-        final int m = grid[0].length;
-        if (n == 0 || m == 0) {
+        if (grid.length == 0 || grid[0].length == 0) {
             return 0;
         }
-        
-        boolean[][] visited = new boolean[n][m];
-        int result = 0;
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (grid[i][j] == LAND && !visited[i][j]) {
-                    result++;
-                    dfs(i, j, grid, visited);
+
+        int count = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1') {
+                    count++;
+                    dfs(grid, i, j);
                 }
             }
         }
-        return result;
+
+        return count;
     }
-    private void dfs(int i, int j, char[][] grid, boolean[][] visited) {
-        visited[i][j] = true;
+    private void dfs(char[][] grid, int x, int y) {
+        grid[x][y] = '0';
         int[] dx = new int[]{-1, 1, 0, 0};
         int[] dy = new int[]{0, 0, -1, 1};
-        for (int k = 0; k < dx.length; k++) {
-            int x = i + dx[k];
-            int y = j + dy[k];
-            if (x >= 0 && x < grid.length && y >= 0 && y < grid[0].length &&
-                grid[x][y] == LAND && !visited[x][y]) {
-                dfs(x, y, grid, visited);
+        for (int k = 0; k < 4; k++) {
+            int i = x + dx[k];
+            int j = y + dy[k];
+            if (i >= 0 && i < grid.length &&
+                j >= 0 && j < grid[0].length &&
+                grid[i][j] == '1') {
+                dfs(grid, i, j);
             }
         }
     }
 }
 // 47 / 47 test cases passed.
-// Runtime: 9 ms
+// Status: Accepted
+// Runtime: 4 ms
+// Memory Usage: 41.2 MB
 
