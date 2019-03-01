@@ -31,44 +31,43 @@ Note: The length of each dimension in the given grid does not exceed 50.
 
 */
 
+
 class Solution {
-    final static int LAND = 1;
+    int[] dx = new int[]{0,0,-1,1};
+    int[] dy = new int[]{-1,1,0,0};
     public int maxAreaOfIsland(int[][] grid) {
-        final int n = grid.length;
-        final int m = grid[0].length;
-        if (n == 0 || m == 0) {
+        if (grid.length == 0 || grid[0].length == 0) {
             return 0;
         }
-        
+
         int result = 0;
-        boolean[][] visited = new boolean[n][m];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (grid[i][j] == LAND && !visited[i][j]) {
-                    result = Math.max(result, dfs(i, j, grid, visited));
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1) {
+                    result = Math.max(result, dfs(grid, i, j));
                 }
             }
         }
-        
+
         return result;
     }
-    private int dfs(int i, int j, int[][] grid, boolean[][] visited) {
-        visited[i][j] = true;
-        int area = 1;
-        
-        int[] dx = new int[]{-1, 1, 0, 0};
-        int[] dy = new int[]{0, 0, -1, 1};
+    private int dfs(int[][] grid, int x, int y) {
+        int result = 1;
+        grid[x][y] = 0;
         for (int k = 0; k < dx.length; k++) {
-            int x = i + dx[k];
-            int y = j + dy[k];
-            if (x >= 0 && x < grid.length && y >= 0 && y < grid[0].length &&
-                grid[x][y] == LAND && !visited[x][y]) {
-                area += dfs(x, y, grid, visited);
+            int i = x + dx[k];
+            int j = y + dy[k];
+            if (i >= 0 && i < grid.length &&
+                j >= 0 && j < grid[0].length &&
+                grid[i][j] == 1) {
+                result += dfs(grid, i, j);
             }
         }
-        return area;
+        return result;
     }
 }
 // 726 / 726 test cases passed.
-// Runtime: 34 ms
+// Status: Accepted
+// Runtime: 15 ms
+// Memory Usage: 47.1 MB
 
