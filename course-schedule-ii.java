@@ -174,4 +174,60 @@ class Solution {
 // Runtime: 11 ms
 
 
+class Solution {
+    class HasCycleException extends Exception {}
+
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        for (int[] pre : prerequisites) {
+            if (!graph.containsKey(pre[1])) {
+                graph.put(pre[1], new ArrayList<>());
+            }
+            graph.get(pre[1]).add(pre[0]);
+        }
+
+        boolean[] visited = new boolean[numCourses];
+        List<Integer> list = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (!visited[i]) {
+                try {
+                    dfs(graph, visited, list, i, new HashSet<>());
+                } catch (HasCycleException cycle) {
+                    return new int[0];
+                }
+            }
+        }
+
+        int[] result = new int[list.size()];
+        int i = 0;
+        for (int n : list) {
+            result[i++] = n;
+        }
+
+        return result;
+    }
+    private void dfs(Map<Integer, List<Integer>> graph, boolean[] visited,
+                     List<Integer> list, int n, Set<Integer> path) 
+        throws HasCycleException {
+        if (!path.add(n)) {
+            throw new HasCycleException();
+        }
+
+        if (graph.containsKey(n)) {
+            for (int child : graph.get(n)) {
+                if (!visited[child]) {
+                    dfs(graph, visited, list, child, path);
+                }
+            }
+        }
+
+        visited[n] = true;
+        list.add(0, n);
+    }
+}
+// 44 / 44 test cases passed.
+// Status: Accepted
+// Runtime: 9 ms
+// Memory Usage: 47.2 MB
+
 
