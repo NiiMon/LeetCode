@@ -77,3 +77,51 @@ class Solution {
 // Status: Accepted
 // Runtime: 8 ms
 // Memory Usage: 45.6 MB
+
+
+// use exception
+class Solution {
+    class HasCycleException extends Exception {}
+
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        for (int[] pre : prerequisites) {
+            if (!graph.containsKey(pre[1])) {
+                graph.put(pre[1], new ArrayList<>());
+            }
+            graph.get(pre[1]).add(pre[0]);
+        }
+        boolean[] visited = new boolean[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            if (!visited[i]) {
+                try {
+                    dfs(graph, visited, i, new HashSet<>());
+                } catch (HasCycleException cycle) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    private void dfs(Map<Integer, List<Integer>> graph, boolean[] visited,
+                     int n, Set<Integer> path) throws HasCycleException {
+        if (!path.add(n)) {
+            throw new HasCycleException();
+        }
+
+        if (graph.containsKey(n)) {
+            for (int child : graph.get(n)) {
+                if (!visited[child]) {
+                    dfs(graph, visited, child, path);
+                }
+            }
+        }
+
+        visited[n] = true;
+    }
+}
+// 42 / 42 test cases passed.
+// Status: Accepted
+// Runtime: 8 ms
+// Memory Usage: 46.6 MB
+
