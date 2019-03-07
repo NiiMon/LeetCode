@@ -69,3 +69,44 @@ class Solution {
 // 44 / 44 test cases passed.
 // Runtime: 1 ms
 
+
+class Solution {
+    public boolean validTree(int n, int[][] edges) {
+        if (edges.length != n - 1) {
+            return false;
+        }
+
+        // build graph
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            graph.get(edge[0]).add(edge[1]);
+            graph.get(edge[1]).add(edge[0]);
+        }
+
+        // walk the graph
+        return dfs(graph, new boolean[n], 0) == graph.size();
+        
+    }
+    private int dfs(List<List<Integer>> graph, boolean[] visited, int n) {
+        if (visited[n]) {
+            return 0;
+        }
+
+        visited[n] = true;
+        int sum = 1;
+
+        for (int child : graph.get(n)) {
+            sum += dfs(graph, visited, child);
+        }
+        
+        return sum;
+    }
+}
+// 44 / 44 test cases passed.
+// Status: Accepted
+// Runtime: 1 ms
+// Memory Usage: 42.4 MB
+
